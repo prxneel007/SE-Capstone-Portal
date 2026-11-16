@@ -9,6 +9,7 @@ MODULES = [
     "core",
     "auth",
     "dashboard",
+    "ideas",
 ]
 
 
