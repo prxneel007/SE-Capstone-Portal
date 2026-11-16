@@ -11,6 +11,7 @@ MODULES = [
     "dashboard",
     "ideas",
     "votes",
+    "teams",
 ]
 
 

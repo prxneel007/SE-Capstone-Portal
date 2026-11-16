@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Teams{% endblock %}
+{% block content %}
+<h1>All teams</h1>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Team</th><th>Members</th><th>Idea</th><th>Mentor</th></tr></thead>
+  <tbody>
+  {% for t in teams %}
+    <tr>
+      <td><a href="{{ url_for('teams.detail', team_id=t.id) }}">{{ t.name }}</a></td>
+      <td>{{ t.size }} / {{ config.MAX_TEAM_SIZE }}</td>
+      <td>{{ t.idea_title or '—' }}</td>
+      <td>{{ t.mentor_name or '—' }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="4">No teams yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
