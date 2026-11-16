@@ -1,0 +1,24 @@
+<div class="card">
+  <h2>Faculty feedback</h2>
+  {% for f in submission_feedback(s.id) %}
+    <div style="border-left:3px solid var(--primary);padding-left:12px;margin-bottom:12px">
+      <p style="margin:0"><strong>{{ f.faculty_name }}</strong> <span class="muted">· {{ f.created_at[:16] }}</span>
+        {% if f.grade %}<span class="pill ok">Grade {{ f.grade }}</span>{% endif %}</p>
+      <p style="margin:4px 0;white-space:pre-line">{{ f.comment }}</p>
+    </div>
+  {% else %}
+    <p class="muted">No feedback yet.</p>
+  {% endfor %}
+  {% if g.user.role in ('faculty', 'admin') %}
+  <form method="post" action="{{ url_for('feedback.create', submission_id=s.id) }}">
+    {{ csrf_field }}
+    <label for="comment">Your feedback</label>
+    <textarea id="comment" name="comment" maxlength="2000" required></textarea>
+    <div class="row">
+      <div><label for="grade">Grade (optional)</label>
+        <select id="grade" name="grade">{% for gr in feedback_grades %}<option value="{{ gr }}">{{ gr or '—' }}</option>{% endfor %}</select></div>
+      <button>Post feedback</button>
+    </div>
+  </form>
+  {% endif %}
+</div>
