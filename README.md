@@ -67,6 +67,10 @@ GitHub Actions runs lint, the test suite on Python 3.10-3.12 with an 80% coverag
 - [Software Design Document](docs/Design_Document.md)
 - [Test Plan](docs/Test_Plan.md)
 - [Product Backlog and Sprint Plan](docs/Product_Backlog.md)
+- [Sprint Reviews and Retrospectives](docs/Sprint_Reviews.md)
+- [Test Summary Report](docs/Test_Report.md)
+- [Deviations from the Plan](docs/Deviations.md)
+- Demo videos: [Sprint 1](videos/Sprint1_Demo.mp4), [Sprint 2](videos/Sprint2_Demo.mp4)
 
 ## Project structure
 ```
