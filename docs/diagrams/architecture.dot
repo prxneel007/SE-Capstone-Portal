@@ -1,0 +1,24 @@
+digraph G {
+  graph [rankdir=TB, fontname="Helvetica", fontsize=13, nodesep=0.35, ranksep=0.55, pad=0.3, label="Capstone Hub - Layered modular monolith (Flask blueprints)", labelloc=t, fontsize=18];
+  node [shape=component, style=filled, fillcolor="#FFF7D6", fontname="Helvetica", fontsize=11];
+  edge [fontname="Helvetica", fontsize=9, color="#444"];
+  browser [shape=box, style="rounded,filled", fillcolor="#E8EEFC", label="Web browser\n(student / faculty / admin)"];
+  subgraph cluster_p { label="Presentation layer"; style=filled; fillcolor="#EAF2FB"; templates [label="Jinja2 templates\n+ responsive CSS"]; }
+  subgraph cluster_b { label="Application layer - feature blueprints"; style=filled; fillcolor="#EEF7EE";
+    auth [label="auth\n(FR-01)"]; ideas [label="ideas + votes\n(FR-02..04)"]; teams [label="teams + allocation\n(FR-05, 06)"];
+    milestones [label="milestones\n(FR-07, 08)"]; submissions [label="submissions\n(FR-09)"]; plagiarism [label="plagiarism\n(FR-10)"];
+    feedback [label="feedback\n(FR-11)"]; notifications [label="notifications\n(FR-12, 13)"]; reports [label="reports\n(FR-14)"]; }
+  subgraph cluster_c { label="Cross-cutting core"; style=filled; fillcolor="#F6F1E4";
+    security [label="security\n(session, CSRF, roles)"]; events [label="events\n(in-process bus)"]; }
+  subgraph cluster_d { label="Data layer"; style=filled; fillcolor="#F6EEF8";
+    db [shape=cylinder, label="SQLite database\n(db.py, schema.sql)"]; files [shape=folder, fillcolor="#FFF", label="uploads/\n(report files)"]; }
+  browser -> templates [label="HTTPS / HTML forms"];
+  templates -> {auth ideas teams milestones submissions feedback notifications reports} [style=dashed, arrowhead=none];
+  {auth ideas teams milestones submissions feedback notifications reports plagiarism} -> db [label="SQL", color="#888"];
+  submissions -> files;
+  submissions -> events [label="submission_created", color="#2f5bd3", fontcolor="#2f5bd3"];
+  feedback -> events [label="feedback_added", color="#2f5bd3", fontcolor="#2f5bd3"];
+  events -> plagiarism [color="#2f5bd3"]; events -> notifications [color="#2f5bd3"];
+  plagiarism -> events [label="plagiarism_flagged", color="#c53030", fontcolor="#c53030"];
+  security -> auth [style=dotted, label="guards all routes"];
+}

@@ -1,0 +1,15 @@
+digraph U {
+  graph [rankdir=LR, fontname="Helvetica", nodesep=0.25, ranksep=1.1, pad=0.3, label="Capstone Hub - Use case diagram", labelloc=t, fontsize=18];
+  node [fontname="Helvetica", fontsize=11]; edge [arrowhead=none, color="#555"];
+  student [shape=none, label="Student", image="", fontsize=13]; faculty [shape=none, label="Faculty", fontsize=13]; admin [shape=none, label="Admin", fontsize=13]; sched [shape=none, label="Scheduler\n(daily / cron)", fontsize=13];
+  subgraph cluster_s { label="Capstone Hub"; style=rounded; color="#555"; node [shape=ellipse, style=filled, fillcolor="#FFF7D6"];
+    uc1 [label="Register / log in"]; uc2 [label="Propose idea"]; uc3 [label="Browse & search ideas"]; uc4 [label="Vote on idea"];
+    uc5 [label="Create / join team"]; uc6 [label="Claim idea"]; uc7 [label="Mentor a team"]; uc8 [label="Set milestones"];
+    uc9 [label="Update milestone status"]; uc10 [label="Submit report"]; uc11 [label="Plagiarism check"]; uc12 [label="Give feedback & grade"];
+    uc13 [label="View notifications"]; uc14 [label="Send progress reminders"]; uc15 [label="View / export progress report"]; uc16 [label="Assign mentor"]; }
+  student -> {uc1 uc2 uc3 uc4 uc5 uc6 uc9 uc10 uc13};
+  faculty -> {uc1 uc2 uc3 uc7 uc8 uc12 uc13 uc15};
+  admin -> {uc16 uc8 uc15 uc12};
+  sched -> uc14;
+  uc10 -> uc11 [style=dashed, arrowhead=vee, label="<<include>>", fontsize=9];
+}

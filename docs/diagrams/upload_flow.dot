@@ -1,0 +1,14 @@
+digraph F {
+  graph [rankdir=TB, fontname="Helvetica", pad=0.3, nodesep=0.3, ranksep=0.35, label="Report upload, plagiarism check and notification flow", labelloc=t, fontsize=16];
+  node [shape=box, style="rounded,filled", fillcolor="#FFF7D6", fontname="Helvetica", fontsize=11]; edge [fontname="Helvetica", fontsize=10, color="#444"];
+  a [label="1. Team member uploads report\nPOST /teams/<id>/submissions", fillcolor="#E8EEFC"];
+  b [label="2. submissions: validate member, extension (.pdf/.txt/.md),\nsize <= 10 MB, milestone belongs to team"];
+  c [label="3. Extract text (pypdf for PDF), save file as random name,\ninsert row with next version number"];
+  d [label="4. emit(\"submission_created\")", fillcolor="#DCE6FB"];
+  e [label="5a. plagiarism: 5-word shingles, Jaccard vs\nevery OTHER team's report, store best score"];
+  f [label="5b. notifications: tell mentor\n'Team X submitted report'"];
+  g [shape=diamond, label="score >= 40%?", fillcolor="#FDF3E1"];
+  h [label="6. emit(\"plagiarism_flagged\") ->\nnotify mentor + admins", fillcolor="#FDE8E8"];
+  i [label="7. Redirect to report page with similarity badge", fillcolor="#E3F5EA"];
+  a -> b -> c -> d; d -> e; d -> f; e -> g; g -> h [label="yes"]; g -> i [label="no"]; h -> i; f -> i;
+}
