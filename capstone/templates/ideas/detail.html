@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ idea.title }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('ideas.index') }}">← Back to Idea Bank</a></p>
+<div class="card">
+  <h1>{{ idea.title }}</h1>
+  <p class="muted">{{ idea.domain }} · proposed by {{ idea.author_name }} on {{ idea.created_at[:10] }}
+    · <strong>{{ idea.votes }}</strong> vote{{ '' if idea.votes == 1 else 's' }}</p>
+  <p style="white-space:pre-line">{{ idea.description }}</p>
+  {% for t in idea.tags.split(', ') if t %}<span class="tag">{{ t }}</span>{% endfor %}
+  <p>
+    {% if idea.team_name %}<span class="pill ok">Claimed by {{ idea.team_name }}</span>
+    {% else %}<span class="pill pending">Open for teams</span>{% endif %}
+  </p>
+  <div class="row" style="justify-content:flex-start">
+    {% if has('votes') and idea.author_id != g.user.id %}
+      <form method="post" action="{{ url_for('votes.toggle', idea_id=idea.id) }}" class="inline">
+        {{ csrf_field }}<button class="{{ 'secondary' if idea.voted else '' }}">{{ 'Remove vote' if idea.voted else 'Upvote' }}</button>
+      </form>
+    {% endif %}
+    {% if has('allocation') %}{% include "ideas/_claim.html" %}{% endif %}
+    {% if can_edit(idea) %}
+      <a class="btn secondary" href="{{ url_for('ideas.edit', idea_id=idea.id) }}">Edit</a>
+      {% if not idea.team_id %}
+      <form method="post" action="{{ url_for('ideas.delete', idea_id=idea.id) }}" class="inline">
+        {{ csrf_field }}<button class="danger">Delete</button>
+      </form>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="row" style="justify-content:space-between;align-items:center">
+  <h1 style="flex:1 1 auto">Progress report</h1>
+  <a class="btn" style="flex:0 0 auto" href="{{ url_for('reports.export_csv', mine='1' if mine else None) }}">Export CSV</a>
+</div>
+{% if g.user.role == 'faculty' %}
+<p><a href="{{ url_for('reports.index') }}">All teams</a> · <a href="{{ url_for('reports.index', mine=1) }}">Only teams I mentor</a></p>
+{% endif %}
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Team</th><th>Idea</th><th>Mentor</th><th>Progress</th><th>Overdue</th><th>Reports</th><th>Max similarity</th><th>Last submission</th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+    <tr>
+      <td><a href="{{ url_for('teams.detail', team_id=r.id) }}">{{ r.name }}</a> <span class="muted">({{ r.members }})</span></td>
+      <td>{{ r.idea or '—' }}</td>
+      <td>{{ r.mentor or '—' }}</td>
+      <td style="min-width:120px">{{ r.done }}/{{ r.total }} · {{ r.percent }}%<div class="progress"><span style="width:{{ r.percent }}%"></span></div></td>
+      <td>{% if r.overdue %}<span class="pill overdue">{{ r.overdue }}</span>{% else %}0{% endif %}</td>
+      <td>{{ r.reports }}</td>
+      <td><span class="pill {{ 'bad' if r.max_sim >= config.PLAGIARISM_THRESHOLD * 100 else 'ok' }}">{{ r.max_sim }}%</span></td>
+      <td>{{ r.last_sub or '—' }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="8">No teams yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

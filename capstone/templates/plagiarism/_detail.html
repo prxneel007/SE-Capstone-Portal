@@ -1,0 +1,9 @@
+<h3>Plagiarism check</h3>
+<p>Highest similarity with another team's report: {% include "plagiarism/_badge.html" %}
+{% if s.similar_to and g.user.role in ('faculty', 'admin') %}
+  {% set match = plagiarism_match(s.similar_to) %}
+  {% if match %} · closest match: <a href="{{ url_for('submissions.detail', submission_id=match.id) }}">{{ match.filename }}</a> (team {{ match.team_name }}){% endif %}
+{% endif %}</p>
+{% if s.similarity >= config.PLAGIARISM_THRESHOLD %}
+  <div class="flash error">Flagged for review: similarity is at or above {{ (config.PLAGIARISM_THRESHOLD * 100)|int }}%.</div>
+{% endif %}

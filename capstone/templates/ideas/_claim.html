@@ -1,0 +1,5 @@
+{% if g.user.role == 'student' and not idea.team_id and team_of(g.user.id) %}
+  <form method="post" action="{{ url_for('allocation.claim', idea_id=idea.id) }}" class="inline">
+    {{ csrf_field }}<button>Claim for my team</button>
+  </form>
+{% endif %}

@@ -1,0 +1,36 @@
+{% set subs = team_submissions(team.id) %}
+<div class="card">
+  <h2>Reports</h2>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>File</th><th>Milestone</th><th>Version</th><th>Submitted</th>{% if has('plagiarism') %}<th>Similarity</th>{% endif %}</tr></thead>
+    <tbody>
+    {% for s in subs %}
+      <tr>
+        <td><a href="{{ url_for('submissions.detail', submission_id=s.id) }}">{{ s.filename }}</a></td>
+        <td>{{ s.milestone_title or '—' }}</td>
+        <td>v{{ s.version }}</td>
+        <td>{{ s.created_at[:16] }} <span class="muted">by {{ s.submitter }}</span></td>
+        {% if has('plagiarism') %}<td>{% include "plagiarism/_badge.html" %}</td>{% endif %}
+      </tr>
+    {% else %}
+      <tr><td colspan="5" class="muted">No reports submitted yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% if is_member %}
+  <form method="post" action="{{ url_for('submissions.upload', team_id=team.id) }}" enctype="multipart/form-data" class="row" style="margin-top:12px">
+    {{ csrf_field }}
+    <div><label for="report">Upload report (.pdf, .txt, .md · max 10 MB)</label>
+      <input id="report" name="report" type="file" accept=".pdf,.txt,.md" required></div>
+    {% if has('milestones') %}
+    <div><label for="milestone_id">For milestone</label>
+      <select id="milestone_id" name="milestone_id"><option value="">General</option>
+        {% for m in team_milestones(team.id) %}<option value="{{ m.id }}">{{ m.title }}</option>{% endfor %}
+      </select></div>
+    {% endif %}
+    <button>Upload</button>
+  </form>
+  {% endif %}
+</div>

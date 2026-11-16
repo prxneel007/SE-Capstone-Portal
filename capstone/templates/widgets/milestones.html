@@ -1,0 +1,14 @@
+<div class="card">
+  <h2>Progress</h2>
+  <p>{{ w.progress.done }} / {{ w.progress.total }} milestones · <strong>{{ w.progress.percent }}%</strong>
+    {% if w.progress.overdue %} · <span class="pill overdue">{{ w.progress.overdue }} overdue</span>{% endif %}</p>
+  <div class="progress"><span style="width:{{ w.progress.percent }}%"></span></div>
+  <h3>Up next</h3>
+  {% for m in w.upcoming %}
+    <p>{{ m.title }} <span class="muted">· due {{ m.due_date }}</span>
+      {% if m.overdue %}<span class="pill overdue">overdue</span>{% endif %}</p>
+  {% else %}
+    <p class="muted">Nothing pending.</p>
+  {% endfor %}
+  <a href="{{ url_for('teams.detail', team_id=w.team_id) }}">Open team page →</a>
+</div>

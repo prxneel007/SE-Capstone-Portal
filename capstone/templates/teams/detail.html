@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ team.name }}{% endblock %}
+{% block content %}
+<h1>{{ team.name }}</h1>
+<div class="grid2">
+  <div class="card">
+    <h2>Members ({{ members|length }}/{{ config.MAX_TEAM_SIZE }})</h2>
+    <ul>{% for m in members %}<li>{{ m.name }}{% if m.srn %} <span class="muted">· {{ m.srn }}</span>{% endif %}</li>{% endfor %}</ul>
+    {% if is_member %}
+      <p>Invite code: <span class="code">{{ team.invite_code }}</span></p>
+      <form method="post" action="{{ url_for('teams.leave', team_id=team.id) }}">
+        {{ csrf_field }}<button class="secondary small">Leave team</button>
+      </form>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h2>Project</h2>
+    {% if team.idea_id %}
+      <p><a href="{{ url_for('ideas.detail', idea_id=team.idea_id) }}">{{ team.idea_title }}</a></p>
+    {% else %}
+      <p class="muted">No idea claimed yet.{% if is_member %} Pick one from the <a href="{{ url_for('ideas.index') }}">Idea Bank</a>.{% endif %}</p>
+    {% endif %}
+    {% if has('allocation') %}{% include "teams/_allocation.html" %}{% endif %}
+  </div>
+</div>
+{% if has('milestones') %}{% include "milestones/_panel.html" %}{% endif %}
+{% if has('submissions') %}{% include "submissions/_panel.html" %}{% endif %}
+{% endblock %}

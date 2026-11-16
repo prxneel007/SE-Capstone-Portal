@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit idea' if idea else 'Propose an idea' }}{% endblock %}
+{% block content %}
+{% set src = request.form if request.method == 'POST' else (idea or {}) %}
+<div class="card" style="max-width:720px">
+  <h1>{{ 'Edit idea' if idea else 'Propose a capstone idea' }}</h1>
+  <form method="post">
+    {{ csrf_field }}
+    <label for="title">Title</label>
+    <input id="title" name="title" value="{{ src.title or '' }}" maxlength="120" required>
+    <label for="domain">Domain</label>
+    <select id="domain" name="domain" required>
+      <option value="">Choose…</option>
+      {% for d in domains %}<option {% if src.domain == d %}selected{% endif %}>{{ d }}</option>{% endfor %}
+    </select>
+    <label for="description">Description</label>
+    <textarea id="description" name="description" required>{{ src.description or '' }}</textarea>
+    <label for="tags">Tags <span class="muted">(comma separated)</span></label>
+    <input id="tags" name="tags" value="{{ src.tags or '' }}" placeholder="nlp, flask, iot">
+    <p><button type="submit">{{ 'Save changes' if idea else 'Publish idea' }}</button>
+       <a class="btn secondary" href="{{ url_for('ideas.detail', idea_id=idea.id) if idea else url_for('ideas.index') }}">Cancel</a></p>
+  </form>
+</div>
+{% endblock %}

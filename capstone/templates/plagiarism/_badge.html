@@ -1,0 +1,2 @@
+{% set pct = (s.similarity * 100)|round|int %}
+<span class="pill {{ 'bad' if s.similarity >= config.PLAGIARISM_THRESHOLD else ('warn' if s.similarity >= 0.2 else 'ok') }}">{{ pct }}%</span>

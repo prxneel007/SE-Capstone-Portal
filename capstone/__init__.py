@@ -9,6 +9,18 @@ MODULES = [
     "core",
     "auth",
     "dashboard",
+    "ideas",
+    "votes",
+    "teams",
+    "allocation",
+    "milestones",
+    "submissions",
+    "plagiarism",
+    "feedback",
+    "notifications",
+    "reports",
+    "errors",
+    "seed",
 ]
 
 
