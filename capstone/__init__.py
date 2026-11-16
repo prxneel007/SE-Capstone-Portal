@@ -19,6 +19,8 @@ MODULES = [
     "feedback",
     "notifications",
     "reports",
+    "errors",
+    "seed",
 ]
 
 
