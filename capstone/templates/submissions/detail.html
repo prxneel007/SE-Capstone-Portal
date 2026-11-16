@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ s.filename }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('teams.detail', team_id=s.team_id) }}">← {{ s.team_name }}</a></p>
+<div class="card">
+  <h1>{{ s.filename }} <span class="muted">v{{ s.version }}</span></h1>
+  <p class="muted">Team {{ s.team_name }} · {{ s.milestone_title or 'General report' }} · submitted {{ s.created_at[:16] }} by {{ s.submitter }}</p>
+  <p><a class="btn" href="{{ url_for('submissions.download', submission_id=s.id) }}">Download</a></p>
+  {% if has('plagiarism') %}{% include "plagiarism/_detail.html" %}{% endif %}
+  <details><summary>Extracted text preview</summary>
+    <pre style="white-space:pre-wrap;max-height:300px;overflow:auto">{{ s.text_content[:3000] }}</pre>
+  </details>
+</div>
+{% if has('feedback') %}{% include "feedback/_panel.html" %}{% endif %}
+{% endblock %}
