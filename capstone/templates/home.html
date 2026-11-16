@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <h1>Capstone Hub</h1>
+  <p>Browse capstone ideas, form teams, track milestones, submit reports and get faculty feedback, all in one place.</p>
+  {% if has('auth') and not g.user %}
+    <p><a class="btn" href="{{ url_for('auth.register') }}">Create an account</a>
+       <a class="btn secondary" href="{{ url_for('auth.login') }}">Log in</a></p>
+  {% endif %}
+</section>
+<section class="grid3">
+  <div class="card"><h3>Idea bank</h3><p>Propose ideas, search by domain and vote for the ones you like.</p></div>
+  <div class="card"><h3>Teams &amp; milestones</h3><p>Form a team, claim an idea and track progress against faculty-set milestones.</p></div>
+  <div class="card"><h3>Reports &amp; feedback</h3><p>Submit reports with automatic plagiarism checks and receive graded feedback.</p></div>
+</section>
+{% endblock %}
