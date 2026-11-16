@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<div class="row" style="justify-content:space-between;align-items:center">
+  <h1 style="flex:1 1 auto">Notifications</h1>
+  {% if items %}
+  <form method="post" action="{{ url_for('notifications.read_all') }}" style="flex:0 0 auto">
+    {{ csrf_field }}<button class="secondary small">Mark all read</button>
+  </form>
+  {% endif %}
+</div>
+{% for n in items %}
+  <div class="card" style="{{ '' if n.is_read else 'border-left:4px solid var(--primary)' }}">
+    <form method="post" action="{{ url_for('notifications.open_one', notification_id=n.id) }}" class="row" style="align-items:center">
+      {{ csrf_field }}
+      <div>{% if not n.is_read %}<strong>{{ n.message }}</strong>{% else %}{{ n.message }}{% endif %}
+        <br><span class="muted">{{ n.created_at[:16] }}</span></div>
+      {% if n.link %}<button class="small secondary">Open</button>{% endif %}
+    </form>
+  </div>
+{% else %}
+  <div class="card"><p>You're all caught up.</p></div>
+{% endfor %}
+{% endblock %}

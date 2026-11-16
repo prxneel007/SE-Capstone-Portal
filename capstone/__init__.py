@@ -17,6 +17,7 @@ MODULES = [
     "submissions",
     "plagiarism",
     "feedback",
+    "notifications",
 ]
 
 
