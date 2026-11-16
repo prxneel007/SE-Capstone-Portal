@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Plagiarism{% endblock %}
+{% block content %}
+<h1>Flagged reports</h1>
+<p class="muted">Reports whose similarity with another team's report is at or above {{ (config.PLAGIARISM_THRESHOLD * 100)|int }}%.</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Report</th><th>Team</th><th>Similarity</th><th>Closest match</th></tr></thead>
+  <tbody>
+  {% for s in flagged %}
+    <tr>
+      <td><a href="{{ url_for('submissions.detail', submission_id=s.id) }}">{{ s.filename }}</a> v{{ s.version }}</td>
+      <td>{{ s.team_name }}</td>
+      <td>{% include "plagiarism/_badge.html" %}</td>
+      <td>{% if s.similar_to %}<a href="{{ url_for('submissions.detail', submission_id=s.similar_to) }}">{{ s.match_filename }}</a> ({{ s.match_team }}){% else %}—{% endif %}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="4">Nothing flagged.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
