@@ -10,7 +10,7 @@ Students browse capstone ideas, form teams, track milestones, submit reports and
 | Chirra Yuktha Praneel (repo owner) | PES2UG24AM049 | @prxneel007 |
 | Dhruv Uppalapati | PES2UG24AM054 | @dhruv5112 |
 | Dhriti L Krishna | PES2UG24AM052 | @dlk27106 |
-| Meghana | PES2UG24AM075 | - |
+| Meghana | PES2UG24AM075 | @Meghana-Konduru |
 
 ## Documents
 - [Software Requirements Specification](docs/SRS.md)
