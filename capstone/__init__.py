@@ -7,6 +7,8 @@ from flask import Flask
 # Feature modules, in load order. Each sprint story adds its module here.
 MODULES = [
     "core",
+    "auth",
+    "dashboard",
 ]
 
 
