@@ -10,6 +10,7 @@ MODULES = [
     "auth",
     "dashboard",
     "ideas",
+    "votes",
 ]
 
 
