@@ -1,0 +1,10 @@
+<div class="card">
+  <h2>Latest feedback</h2>
+  {% for f in w["items"] %}
+    <p><a href="{{ url_for('submissions.detail', submission_id=f.submission_id) }}">{{ f.filename }}</a>
+      {% if f.grade %}<span class="pill ok">{{ f.grade }}</span>{% endif %}<br>
+      <span class="muted">{{ f.faculty_name }}:</span> {{ f.comment|truncate(120) }}</p>
+  {% else %}
+    <p class="muted">No feedback on your reports yet.</p>
+  {% endfor %}
+</div>

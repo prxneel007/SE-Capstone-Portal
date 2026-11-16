@@ -16,6 +16,7 @@ MODULES = [
     "milestones",
     "submissions",
     "plagiarism",
+    "feedback",
 ]
 
 
