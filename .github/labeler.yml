@@ -1,0 +1,32 @@
+auth:
+  - changed-files:
+      - any-glob-to-any-file: ["capstone/auth.py", "capstone/security.py", "capstone/templates/auth/**"]
+ideas:
+  - changed-files:
+      - any-glob-to-any-file: ["capstone/ideas.py", "capstone/votes.py", "capstone/templates/ideas/**"]
+teams:
+  - changed-files:
+      - any-glob-to-any-file: ["capstone/teams.py", "capstone/allocation.py", "capstone/templates/teams/**"]
+milestones:
+  - changed-files:
+      - any-glob-to-any-file: ["capstone/milestones.py", "capstone/templates/milestones/**"]
+submissions:
+  - changed-files:
+      - any-glob-to-any-file: ["capstone/submissions.py", "capstone/plagiarism.py", "capstone/feedback.py",
+                               "capstone/templates/submissions/**", "capstone/templates/plagiarism/**",
+                               "capstone/templates/feedback/**"]
+notifications:
+  - changed-files:
+      - any-glob-to-any-file: ["capstone/notifications.py", "capstone/templates/notifications/**"]
+reports:
+  - changed-files:
+      - any-glob-to-any-file: ["capstone/reports.py", "capstone/templates/reports/**"]
+tests:
+  - changed-files:
+      - any-glob-to-any-file: ["tests/**"]
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: ["docs/**", "README.md"]
+ci:
+  - changed-files:
+      - any-glob-to-any-file: [".github/**"]

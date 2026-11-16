@@ -1,0 +1,64 @@
+name: PR automation
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  label:
+    name: Label by changed area
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v5
+        with:
+          sync-labels: true
+
+  assign-author:
+    name: Assign PR to its author
+    if: github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: gh pr edit "$PR" --repo "$GITHUB_REPOSITORY" --add-assignee "$AUTHOR"
+
+  linked-issue:
+    name: PR must link a backlog issue
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if printf '%s' "$BODY" | grep -Eiq '(close[sd]?|fix(e[sd])?|resolve[sd]?) #[0-9]+'; then
+            echo "Linked issue found."
+          else
+            echo "::error::Add 'Closes #<issue>' to the PR description so the backlog item is linked."
+            exit 1
+          fi
+
+  commit-messages:
+    name: Commit message check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          bad=0
+          while IFS= read -r subject; do
+            if [ ${#subject} -lt 10 ] || [ ${#subject} -gt 100 ]; then
+              echo "::error::Commit subject must be 10-100 characters: '$subject'"
+              bad=1
+            fi
+          done < <(git log --format=%s "$BASE..$HEAD")
+          exit $bad
