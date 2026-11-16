@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Welcome, {{ g.user.name }}</h1>
+<p class="muted">Signed in as {{ g.user.role }}{% if g.user.srn %} · {{ g.user.srn }}{% endif %}</p>
+<div class="grid2">
+  {% for w in widgets %}
+    {% include w.template %}
+  {% else %}
+    <div class="card"><p>Nothing here yet.</p></div>
+  {% endfor %}
+</div>
+{% endblock %}
