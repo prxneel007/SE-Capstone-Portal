@@ -1,0 +1,24 @@
+{% if team.idea_id and (is_member or is_staff) %}
+  <form method="post" action="{{ url_for('allocation.release', team_id=team.id) }}">
+    {{ csrf_field }}<button class="secondary small">Release idea</button>
+  </form>
+{% endif %}
+<h3>Mentor</h3>
+<p>{{ team.mentor_name or 'No mentor yet' }}</p>
+{% if g.user.role == 'faculty' and not team.mentor_id %}
+  <form method="post" action="{{ url_for('allocation.set_mentor', team_id=team.id) }}">
+    {{ csrf_field }}<button class="small">Mentor this team</button>
+  </form>
+{% elif g.user.role == 'admin' %}
+  <form method="post" action="{{ url_for('allocation.set_mentor', team_id=team.id) }}" class="row">
+    {{ csrf_field }}
+    <div><label for="faculty_id">Assign faculty</label>
+      <select id="faculty_id" name="faculty_id">{% for f in faculty_list() %}<option value="{{ f.id }}" {% if f.id == team.mentor_id %}selected{% endif %}>{{ f.name }}</option>{% endfor %}</select></div>
+    <button class="small">Assign</button>
+  </form>
+{% endif %}
+{% if team.mentor_id and is_staff %}
+  <form method="post" action="{{ url_for('allocation.remove_mentor', team_id=team.id) }}">
+    {{ csrf_field }}<button class="secondary small">Remove mentor</button>
+  </form>
+{% endif %}

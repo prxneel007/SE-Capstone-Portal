@@ -1,0 +1,9 @@
+<div class="card">
+  <h2>Teams I mentor</h2>
+  {% for t in w.teams %}
+    <p><a href="{{ url_for('teams.detail', team_id=t.id) }}"><strong>{{ t.name }}</strong></a>
+       <span class="muted">· {{ t.idea_title or 'no idea yet' }}</span></p>
+  {% else %}
+    <p>You aren't mentoring any team yet. Open <a href="{{ url_for('teams.index') }}">Teams</a> to pick one.</p>
+  {% endfor %}
+</div>
