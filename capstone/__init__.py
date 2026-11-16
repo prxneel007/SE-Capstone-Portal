@@ -12,6 +12,7 @@ MODULES = [
     "ideas",
     "votes",
     "teams",
+    "allocation",
 ]
 
 
