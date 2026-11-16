@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Idea Bank{% endblock %}
+{% block content %}
+<div class="row" style="justify-content:space-between;align-items:center">
+  <h1 style="flex:1 1 auto">Idea Bank</h1>
+  <a class="btn" href="{{ url_for('ideas.create') }}" style="flex:0 0 auto">+ Propose an idea</a>
+</div>
+<form method="get" class="card row" role="search">
+  <div><label for="q">Search</label><input id="q" name="q" value="{{ q }}" placeholder="title, description or tag"></div>
+  <div><label for="domain">Domain</label>
+    <select id="domain" name="domain"><option value="">All domains</option>
+      {% for d in domains %}<option {% if d == domain %}selected{% endif %}>{{ d }}</option>{% endfor %}
+    </select></div>
+  <div><label for="sort">Sort by</label>
+    <select id="sort" name="sort">
+      <option value="new">Newest</option>
+      <option value="votes" {% if sort == 'votes' %}selected{% endif %}>Most votes</option>
+    </select></div>
+  <button type="submit">Apply</button>
+</form>
+<p class="muted">{{ ideas|length }} idea{{ '' if ideas|length == 1 else 's' }}</p>
+<div class="idea-list">
+{% for idea in ideas %}
+  <div class="card">
+    <div class="vote">
+      <strong>{{ idea.votes }}</strong><span class="muted">vote{{ '' if idea.votes == 1 else 's' }}</span>
+      {% if has('votes') and idea.author_id != g.user.id %}
+        <form method="post" action="{{ url_for('votes.toggle', idea_id=idea.id) }}">
+          {{ csrf_field }}<input type="hidden" name="next" value="{{ request.full_path }}">
+          <button class="small {{ 'secondary' if idea.voted else '' }}">{{ 'Unvote' if idea.voted else 'Upvote' }}</button>
+        </form>
+      {% endif %}
+    </div>
+    <div>
+      <h3 style="margin:0"><a href="{{ url_for('ideas.detail', idea_id=idea.id) }}">{{ idea.title }}</a></h3>
+      <p class="muted" style="margin:4px 0">{{ idea.domain }} · by {{ idea.author_name }}
+        {% if idea.team_name %} · <span class="pill ok">Claimed by {{ idea.team_name }}</span>{% else %} · <span class="pill pending">Open</span>{% endif %}</p>
+      <p style="margin:4px 0">{{ idea.description|truncate(180) }}</p>
+      {% for t in idea.tags.split(', ') if t %}<span class="tag">{{ t }}</span>{% endfor %}
+    </div>
+  </div>
+{% else %}
+  <div class="card"><p>No ideas match your search.</p></div>
+{% endfor %}
+</div>
+{% endblock %}
