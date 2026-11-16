@@ -14,6 +14,7 @@ MODULES = [
     "teams",
     "allocation",
     "milestones",
+    "submissions",
 ]
 
 
