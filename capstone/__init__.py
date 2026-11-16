@@ -13,6 +13,7 @@ MODULES = [
     "votes",
     "teams",
     "allocation",
+    "milestones",
 ]
 
 

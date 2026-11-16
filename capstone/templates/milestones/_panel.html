@@ -1,0 +1,49 @@
+{% set ms = team_milestones(team.id) %}
+{% set prog = milestone_progress(team.id) %}
+<div class="card">
+  <h2>Milestones</h2>
+  <p>{{ prog.done }} of {{ prog.total }} done · <strong>{{ prog.percent }}%</strong>
+    {% if prog.overdue %} · <span class="pill overdue">{{ prog.overdue }} overdue</span>{% endif %}</p>
+  <div class="progress" role="progressbar" aria-valuenow="{{ prog.percent }}" aria-valuemin="0" aria-valuemax="100"><span style="width:{{ prog.percent }}%"></span></div>
+  <div class="table-wrap" style="margin-top:12px">
+  <table>
+    <thead><tr><th>Milestone</th><th>Due</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for m in ms %}
+      <tr>
+        <td><strong>{{ m.title }}</strong>{% if m.description %}<br><span class="muted">{{ m.description }}</span>{% endif %}</td>
+        <td>{{ m.due_date }}{% if m.overdue %} <span class="pill overdue">overdue</span>{% endif %}</td>
+        <td><span class="pill {{ m.status }}">{{ m.status.replace('_', ' ') }}</span></td>
+        <td>
+          {% if is_member or is_staff %}
+          <form method="post" action="{{ url_for('milestones.update_status', milestone_id=m.id) }}" class="row" style="flex-wrap:nowrap">
+            {{ csrf_field }}
+            <select name="status" aria-label="Status for {{ m.title }}">
+              {% for s in milestone_statuses %}<option value="{{ s }}" {% if s == m.status %}selected{% endif %}>{{ s.replace('_', ' ') }}</option>{% endfor %}
+            </select>
+            <button class="small">Save</button>
+          </form>
+          {% endif %}
+          {% if is_staff %}
+          <form method="post" action="{{ url_for('milestones.delete', milestone_id=m.id) }}">
+            {{ csrf_field }}<button class="linkbtn">delete</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="4" class="muted">No milestones yet{% if not is_staff %}. Your mentor will add them{% endif %}.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% if is_staff %}
+  <form method="post" action="{{ url_for('milestones.create', team_id=team.id) }}" class="row" style="margin-top:12px">
+    {{ csrf_field }}
+    <div><label for="ms-title">New milestone</label><input id="ms-title" name="title" maxlength="120" required></div>
+    <div><label for="ms-due">Due date</label><input id="ms-due" name="due_date" type="date" required></div>
+    <div><label for="ms-desc">Description</label><input id="ms-desc" name="description"></div>
+    <button>Add</button>
+  </form>
+  {% endif %}
+</div>
